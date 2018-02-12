@@ -4,7 +4,7 @@ import { withRouter } from 'react-router'
 
 import { AUTH_TOKEN } from '../constants'
 
-import { Menu, Icon } from 'antd';
+import { Menu, Icon, Button } from 'antd';
 
 class SideMenu extends Component {
   render() {
@@ -16,6 +16,14 @@ class SideMenu extends Component {
             <img alt="user profile" src={require('../assets/images/logo.png')} />
             <h4>User Name</h4>
             <p>@username</p>
+            <Button key="logout"
+              onClick={() => {
+                localStorage.removeItem(AUTH_TOKEN)
+                this.props.history.push(`/`)
+              }}
+            >
+              <Icon type="logout" />
+            </Button>
           </div>
         ) : (
           <div></div>

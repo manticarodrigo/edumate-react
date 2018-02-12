@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Switch, Route } from 'react-router-dom'
+import { AUTH_TOKEN } from '../constants'
 
 import '../styles/App.css'
 
@@ -25,59 +26,41 @@ class App extends Component {
   }
 
   render() {
+    const authToken = localStorage.getItem(AUTH_TOKEN)
+    console.log(authToken)
     return (
-      <Layout>
-        <Sider
-          trigger={null}
-          collapsible
-          collapsed={this.state.collapsed}
-          className="sidemenu"
-        >
-          <SideMenu />
-        </Sider>
-        <Layout>
-          <Header className="navmenu">
-            <NavMenu action={this.toggle} state={this.state} />
-          </Header>
-          <Content className="main-content">
-            <Switch>
-              <Route exact path="/" component={Feed} />
-              <Route exact path="/courses" component={CourseList} />
-              <Route exact path="/schedule" component={Schedule} />
-            </Switch>
+      <div className='app-container'>
+        {authToken ? (
+          <Layout>
+            <Sider
+              trigger={null}
+              collapsible
+              collapsed={this.state.collapsed}
+              className='sidemenu'
+            >
+              <SideMenu />
+            </Sider>
+            <Layout>
+              <Header className='navmenu'>
+                <NavMenu action={this.toggle} state={this.state} />
+              </Header>
+              <Content className='main-content'>
+                <Switch>
+                  <Route exact path='/' component={Feed} />
+                  <Route exact path='/courses' component={CourseList} />
+                  <Route exact path='/schedule' component={Schedule} />
+                </Switch>
+              </Content>
+            </Layout>
+          </Layout>
+        ) : (
+          <Content>
+            <Route exact path='/' component={Login} />
           </Content>
-        </Layout>
-      </Layout>
+        )}
+      </div>
     )
   }
 }
 
 export default App
-
-
-// {authToken && (
-//   <Menu.Item key="courses">
-//     <Link to="/courses">
-//     <Icon type="appstore" />
-//       Courses
-//     </Link>
-//   </Menu.Item>
-// )}
-// {authToken ? (
-//   <Menu.Item key="logout"
-//     onClick={() => {
-//       localStorage.removeItem(AUTH_TOKEN)
-//       this.props.history.push(`/`)
-//     }}
-//   >
-//     <Icon type="mail" />
-//     logout
-//   </Menu.Item>
-// ) : (
-//   <Menu.Item key="login">
-//     <Link to="/login">
-//       <Icon type="mail" />
-//       Login
-//     </Link>
-//   </Menu.Item>
-// )}

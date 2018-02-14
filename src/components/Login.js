@@ -9,7 +9,7 @@ const FormItem = Form.Item;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
-const tabList = [{key:'login', tab:'LOGIN'}, {key:'register', tab:'REGISTER'}]
+const tabList = [{key:'login', tab:'Login'}, {key:'register', tab:'Register'}]
 const contentList = {login: this.LoginForm, register: this.RegisterForm}
 
 class Login extends Component {
@@ -21,75 +21,64 @@ class Login extends Component {
     firstName: '',
     lastName: ''
   }
-  onTabChange = (key) => {
-    console.log(key);
-    this.state.login = !this.state.login;
-  }
   render() {
     return (
       <Row style={{height:'100vh', textAlign:'center', backgroundColor:'#0D99FC'}} type='flex' align='middle'>
         <Col span={8}>col-8</Col>
         <Col span={8}>
           <img style={{width:'200px', margin:'0 0 2em'}} src={require('../assets/images/logo-full.png')} />
-          <Card tabList={tabList} onTabChange={(key) => {this.onTabChange(key)}}>
-            {!this.state.login ? (
-              <Form className='login-form'>
-                <FormItem>
-                  <Input value={this.state.username} prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='Username / Email Address' />
-                </FormItem>
-                <FormItem>
-                  <Input prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />} type='password' placeholder='Password' />
-                </FormItem>
-                <FormItem>
-                  <Button type='primary' htmlType='submit' className='login-form-button'>
-                    Log in
-                  </Button>
-                </FormItem>
-                <FormItem>
-                  <a className='login-form-forgot' href='/forgot'>Forgot password?</a>
-                </FormItem>
-              </Form>
-            ) : ( 
-              <div className='flex flex-column'>
+          <Card tabList={tabList} onTabChange={() => {this.toggleState()}}>
+            <Form className='auth-form'>
+              <FormItem>
                 {!this.state.login && (
                   <div>
-                    <input
+                    <Input
                       value={this.state.username}
                       onChange={e => this.setState({ username: e.target.value })}
                       type='text'
-                      placeholder='Your username'
+                      placeholder='Username'
+                      prefix={<Icon type='smile-o' style={{ color: 'rgba(0,0,0,.25)' }} />}
                     />
-                    <input
+                    <Input
                       value={this.state.firstName}
                       onChange={e => this.setState({ firstName: e.target.value })}
                       type='text'
-                      placeholder='Your first name'
+                      placeholder='First name'
+                      prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
                     />
-                    <input
+                    <Input
                       value={this.state.lastName}
                       onChange={e => this.setState({ lastName: e.target.value })}
                       type='text'
-                      placeholder='Your last name'
+                      placeholder='Last name'
+                      prefix={<Icon type='team' style={{ color: 'rgba(0,0,0,.25)' }} />}
                     />
                   </div>
                 )}
-                <input
+                <Input
                   value={this.state.email}
                   onChange={e => this.setState({ email: e.target.value })}
                   type='text'
-                  placeholder='Your email address'
+                  placeholder='Email address'
+                  prefix={<Icon type='mail' style={{ color: 'rgba(0,0,0,.25)' }} />}
                 />
-                <input
+                <Input
                   value={this.state.password}
                   onChange={e => this.setState({ password: e.target.value })}
                   type='password'
-                  placeholder='Your password'
+                  placeholder='Password'
+                  prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
                 />
-                <div className='pointer mr2 button' onClick={() => this._confirm()}>
-                  {this.state.login ? 'login' : 'create account'}
-                </div>
-              </div>
-            )}
+              </FormItem>
+              <FormItem>
+                <Button className='auth-form-button' type='primary' htmlType='submit' onClick={() => this._confirm()}>
+                  {this.state.login ? 'Login' : 'Register'}
+                </Button>
+              </FormItem>
+              <FormItem>
+                <a className='login-form-forgot' href='/forgot'>Forgot password?</a>
+              </FormItem>
+            </Form>
           </Card>
         </Col>
         <Col span={8}>col-8</Col>
@@ -98,7 +87,7 @@ class Login extends Component {
   }
 
   toggleState = () => {
-    this.state.login = !this.state.login
+    this.setState({login: !this.state.login})
   }
 
   _confirm = async () => {

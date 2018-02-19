@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { AUTH_TOKEN } from '../constants'
+import { CURRENT_USER } from '../../constants'
 
-import '../styles/App.css'
+import './App.css'
 
 import NavMenu from './NavMenu'
 import SideMenu from './SideMenu'
-import Login from './Login'
-import Feed from './Feed'
-import CourseList from './CourseList'
-import Schedule from './Schedule'
+import Login from '../Login/Login'
+import Feed from '../Feed'
+import CourseList from '../CourseList'
+import Schedule from '../Schedule'
 
 import { Layout } from 'antd';
 const { Header, Sider, Content } = Layout;
@@ -26,11 +26,12 @@ class App extends Component {
   }
 
   render() {
-    const authToken = localStorage.getItem(AUTH_TOKEN)
-    console.log(authToken)
+    const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER))
+    console.log('currentUser:')
+    console.log(currentUser)
     return (
       <div className='app-container'>
-        {authToken ? (
+        {currentUser ? (
           <Layout>
             <Sider
               trigger={null}

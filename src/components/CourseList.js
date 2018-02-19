@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
-import { Row, Col, Card } from 'antd'
+import { List, Card } from 'antd'
 const { Meta } = Card;
 
 
@@ -23,27 +23,27 @@ class CourseList extends Component {
     const coursesToRender = this.props.courseQuery.allCourses
 
     return (
-      <Row gutter={10}>
-        {coursesToRender.map(course => {
-          return (
-            <Col xs={1} sm={2} md={3} lg={4} xl={6}>
-              <Card
-                hoverable='true'
-                loading={this.props.courseQuery.loading}
-                style={{maxHeight:'400px'}} 
-                cover={<img alt='course profile' src={ course.imageUrl ? course.imageUrl : require('../assets/images/course-placeholder.svg') }/>}
-                extra={<a href="#">More</a>}
+      <List 
+        grid={{gutter:16,column:4}}
+        dataSource={coursesToRender}
+        renderItem={course => (
+          <List.Item>
+            <Card
+              hoverable='true'
+              loading={this.props.courseQuery.loading}
+              style={{maxHeight:'400px'}} 
+              cover={<img alt='course profile' src={ course.imageUrl ? course.imageUrl : require('../assets/images/course-placeholder.svg') }/>}
+              extra={<a href="/">More</a>}
+            >
+              <Meta
+                title={course.name}
+                description={course.description}
               >
-                <Meta
-                  title={course.name}
-                  description={course.description}
-                >
-                </Meta>
-              </Card>
-            </Col>
-          )
-        })}
-      </Row>
+              </Meta>
+            </Card>
+          </List.Item>
+        )}
+      />
     )
   }
 }

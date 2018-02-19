@@ -28,19 +28,19 @@ class NavMenu extends Component {
         <Menu.Item key="/" >
           <Link to="/">
             <Icon type="home" />
-            Feed
+            <span>Feed</span>
           </Link>
         </Menu.Item>
         <Menu.Item key="/courses">
           <Link to="/courses">
-          <Icon type="book" />
-            Courses
+            <Icon type="book" />
+            <span>Courses</span>
           </Link>
         </Menu.Item>
         <Menu.Item key="/schedule">
           <Link to="/schedule">
             <Icon type="calendar" />
-            Schedule
+            <span>Schedule</span>
           </Link>
         </Menu.Item>
       </Menu>

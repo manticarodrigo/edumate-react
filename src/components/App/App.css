@@ -1,0 +1,108 @@
+.sidemenu {
+  position: relative;
+  background-color: #fff;
+  border-right: 1px solid #e8e8e8;
+  z-index: 999;
+}
+
+.sidemenu .sidemenu-content {
+  position: sticky;
+  top: 0px;
+  overflow: hidden;
+}
+
+.sidemenu .sidemenu-content .header {
+  padding: 1em 1em 0.5em;
+  position: relative;
+}
+
+.sidemenu.ant-layout-sider-collapsed .sidemenu-content .header {
+  text-align: center;
+}
+
+.sidemenu .sidemenu-content .header .top {
+  position: relative;
+}
+
+.sidemenu .sidemenu-content .header .top img {
+  width: 35px;
+  height: 35px;
+}
+
+.sidemenu .sidemenu-content .header .top .float-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.sidemenu.ant-layout-sider-collapsed .sidemenu-content .header .top .float-right {
+  position: relative;
+}
+
+.sidemenu .sidemenu-content .header .top .collapsed,
+.sidemenu.ant-layout-sider-collapsed .sidemenu-content .header .top button,
+.sidemenu.ant-layout-sider-collapsed .sidemenu-content .header .top .uncollapsed {
+  display: none;
+}
+
+.sidemenu .sidemenu-content .header .top .collapsed {
+  display: none;
+}
+
+.sidemenu.ant-layout-sider-collapsed .sidemenu-content .header .top .collapsed {
+  display: block;
+  position: relative;
+}
+
+.sidemenu .sidemenu-content .header .bottom h4 {
+  margin-top: 1em;
+  /* line-height: 1em; */
+}
+
+.sidemenu .sidemenu-content .header .bottom p {
+  font-size: 0.8em;
+  line-height: 0.25em;
+}
+
+.sidemenu.ant-layout-sider-collapsed .sidemenu-content .header h4,
+.sidemenu.ant-layout-sider-collapsed .sidemenu-content .header p {
+  display: none;
+}
+
+.sidemenu .ant-menu {
+  border-right: none !important;
+  max-width: calc(100% - 1px);
+}
+
+@media only screen and (max-width: 750px) {
+  .sidemenu.ant-layout-sider-collapsed {
+    width: 0 !important;
+    max-width: 0 !important;
+    min-width: 0 !important;
+  }
+}
+
+.navmenu {
+  padding: 0;
+  top: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
+  background-color: #fff;
+}
+
+.navmenu ul {
+  line-height: 64px;
+}
+
+@media only screen and (max-width: 750px) {
+  .navmenu .ant-menu-item span {
+    display: none;
+  }
+}
+
+.main-content {
+  position: relative;
+  padding: 72px 8px 8px;
+  min-height: 100vh;
+}

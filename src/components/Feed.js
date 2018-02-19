@@ -4,7 +4,7 @@ import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import { List, Card, Icon, Avatar, Spin, Alert } from 'antd';
-const { Meta, Grid } = Card;
+const { Meta } = Card;
 
 class Feed extends Component {
   render() {

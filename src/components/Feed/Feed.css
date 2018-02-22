@@ -1,0 +1,14 @@
+.post-card {
+	max-width: 600px;
+	margin: 20px auto;
+}
+
+.post-author {
+  line-height: 1em;
+}
+
+.post-author p {
+	font-size: 0.75em;
+	font-weight: 100;
+	color: #999999;
+}

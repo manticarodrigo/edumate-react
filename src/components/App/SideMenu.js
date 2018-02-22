@@ -27,6 +27,7 @@ class SideMenu extends Component {
           <span key='logout' onClick={() => {
             localStorage.removeItem(CURRENT_USER)
             this.props.history.push(`/`)
+            console.log('logout pressed')
           }}>
             <Icon type='logout' />
             <span>Logout</span>
@@ -40,7 +41,7 @@ class SideMenu extends Component {
           <div className='header'>
             <div className='top'>
               <div className='uncollapsed'>
-                <img alt='user profile' src={require('../../assets/images/logo.png')} />
+                <img alt='user profile' src={currentUser.imageUrl ? currentUser.imageUrl : require('../../assets/images/user-placeholder.png')} />
               </div>
               <div className='float-right'>
                 <Popover
@@ -52,7 +53,7 @@ class SideMenu extends Component {
                   onVisibleChange={this.handleSettingsVisibleChange}
                 >
                   <div className='collapsed'>
-                    <img alt='user profile' src={require('../../assets/images/logo.png')} />
+                    <img alt='user profile' src={currentUser.imageUrl ? currentUser.imageUrl : require('../../assets/images/user-placeholder.png')} />
                   </div>
                   <div className='uncollapsed'>
                     <Button shape='circle' icon='setting' />
@@ -74,6 +75,12 @@ class SideMenu extends Component {
               <span>Profile</span>
             </Link>
           </MenuItem>
+          <MenuItem key='/notifications'>
+            <Link to='/notifications'>
+              <Icon type='notification' />
+              <span>Notifications</span>
+            </Link>
+          </MenuItem>
           <MenuItem key='/messages'>
             <Link to='/messages'>
               <Icon type='message' />
@@ -88,12 +95,7 @@ class SideMenu extends Component {
           </MenuItem>
           <Menu.Divider />
           <MenuItem>
-            <Link to='/help'
-              onClick={() => {
-                localStorage.removeItem(CURRENT_USER)
-                this.props.history.push(`/`)
-              }}
-            >
+            <Link to='/help'>
               <Icon type='question-circle-o' />
               <span>Help</span>
             </Link>

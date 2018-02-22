@@ -7,7 +7,7 @@ import './App.css'
 import NavMenu from './NavMenu'
 import SideMenu from './SideMenu'
 import Login from '../Login/Login'
-import Feed from '../Feed'
+import Feed from '../Feed/Feed'
 import CourseList from '../CourseList'
 import Schedule from '../Schedule'
 

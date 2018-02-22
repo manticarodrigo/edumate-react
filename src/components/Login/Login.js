@@ -6,7 +6,7 @@ import './Login.css'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
-import { Row, Col, Form, Icon, Input, Button, Card } from 'antd';
+import { Row, Col, Form, Alert, Icon, Input, Button, Card } from 'antd';
 const FormItem = Form.Item
 
 const tabList = [{key:'login', tab:'Login'}, {key:'register', tab:'Register'}]
@@ -152,6 +152,7 @@ const RegisterForm = Form.create({
 class Login extends Component {
   state = {
     login: true,
+    error: '',
     email: {
        value: ''
     },
@@ -196,6 +197,14 @@ class Login extends Component {
               <Icon type={this.state.login ? 'login' : 'form'} />
               {this.state.login ? 'Login' : 'Register'}
             </Button>
+            {this.state.error && (
+              <Alert
+                style={{marginTop:'1em'}}
+                message={this.state.error}
+                type="error"
+                showIcon
+              />
+            )}
           </Form>
           </Card>
         </Col>
@@ -215,9 +224,12 @@ class Login extends Component {
           password,
         },
       }).catch((error) => {
-        console.log(error)
+        console.log(JSON.parse(JSON.stringify(error)))
+        this.state.error = error.graphQLErrors[0].functionError
       })
-      this._saveUserData(JSON.stringify(result.data.authenticateUser))
+      if (result) {
+        this._saveUserData(JSON.stringify(result.data.authenticateUser))
+      }
     } else {
       const result = await this.props.signupMutation({
         variables: {
@@ -228,9 +240,12 @@ class Login extends Component {
           password,
         },
       }).catch((error) => {
-        console.log(error)
+        console.log(JSON.parse(JSON.stringify(error)))
+        this.state.error = error.graphQLErrors[0].functionError
       })
-      this._saveUserData(JSON.stringify(result.data.signupUser))
+      if (result) {
+        this._saveUserData(JSON.stringify(result.data.signupUser))
+      }
     }
     this.props.history.push(`/`)
   }

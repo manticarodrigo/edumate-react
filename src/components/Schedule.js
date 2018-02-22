@@ -86,7 +86,9 @@ class Schedule extends Component {
 
 const TASK_QUERY = gql`
   query TaskQuery {
-    allTasks {
+    allTasks(
+      orderBy: createdAt_DSC
+    ) {
       id
       name
       description

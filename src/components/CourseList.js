@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
-import { List, Card } from 'antd'
+import { List, Card, Icon, Spin, Alert } from 'antd'
 const { Meta } = Card;
 
 
@@ -11,13 +11,23 @@ const { Meta } = Card;
 class CourseList extends Component {
   render() {
 
+    const spinnerIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+
     if (this.props.courseQuery && this.props.courseQuery.loading) {
-      return <div>Loading</div>
+      return <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', margin:'0'}}><Spin indicator={spinnerIcon}/> LOADING</div>
     }
 
     if (this.props.courseQuery && this.props.courseQuery.error) {
       console.log(this.props.courseQuery.error)
-      return <div>Error</div>
+      return (
+        <Alert
+          message="ERROR"
+          description="There was a problem loading your courses."
+          type="error"
+          showIcon
+          banner
+        />
+      )
     }
 
     const coursesToRender = this.props.courseQuery.allCourses

@@ -1,14 +1,75 @@
+.create-post-card,
 .post-card {
 	max-width: 600px;
 	margin: 20px auto;
 }
 
-.post-author {
-  line-height: 1em;
+.create-post-card {
+	margin-bottom: 0;
 }
 
-.post-author p {
-	font-size: 0.75em;
-	font-weight: 100;
-	color: #999999;
+.create-post-card .ant-card-body {
+	padding-bottom: 1em;
+}
+
+.create-post-card .buttons-row {
+	position: relative;
+}
+
+.create-post-card .buttons-row .ant-upload.ant-upload-select {
+	display: inline;
+	margin-left: 5px;
+}
+
+.create-post-card .buttons-row .ant-upload-list {
+	position: absolute;
+	top: -2.5px;
+	left: 6em;
+}
+
+.create-post-card .buttons-row .ant-upload-list .ant-upload-list-item {
+	/* margin-top: 2px; */
+}
+
+.create-post-card .buttons-row .submit-btn {
+	float: right;
+}
+
+.post-card .ant-avatar {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.post-card .ant-card-meta {
+	margin-bottom: 16px;
+}
+
+.post-card .ant-card-meta-detail > div:not(:last-child) {
+	margin-bottom: 0;
+}
+
+.post-card .ant-card-meta-title {
+  line-height: 1.25em;
+}
+
+.post-card .ant-card-meta-description {
+	/* line-height: 0.5em; */
+	/* font-weight: 400;
+	color: #999999; */
+}
+
+.post-img {
+	margin: 8px 0;
+	max-height: 300px;
+	max-width: 300px;
+}
+
+.post-img img {
+	object-fit: cover;
+}
+
+.post-img .ant-card-body {
+	display: none;
 }

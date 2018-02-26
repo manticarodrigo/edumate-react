@@ -9,10 +9,33 @@ import { timeDifferenceForDate } from '../../utils'
 
 import CreatePost from './CreatePost'
 
-import { List, Card, Icon, Avatar, Spin, Alert } from 'antd';
+import { List, Card, Icon, Avatar, Spin, Modal, Alert } from 'antd';
 const { Meta } = Card;
 
 class Feed extends Component {
+  state = {
+    modalVisible: false,
+    modalImg: ''
+  }
+  showModal = (imageUrl) => {
+    console.log(imageUrl)
+    this.setState({
+      modalVisible: true,
+      modalImg: imageUrl
+    })
+  }
+  handleOk = (e) => {
+    console.log(e);
+    this.setState({
+      modalVisible: false,
+    })
+  }
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      modalVisible: false,
+    })
+  }
   render() {
 
     const spinnerIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -41,8 +64,8 @@ class Feed extends Component {
       <div>
         <CreatePost />
         <List
-          itemLayout="vertical"
-          size="large"
+          itemLayout='vertical'
+          size='large'
           dataSource={postsToRender}
           renderItem={post => (
             <Card
@@ -52,19 +75,29 @@ class Feed extends Component {
             >
               <Meta
                 avatar={<Avatar src={post.author.imageUrl ? post.author.imageUrl : require('../../assets/images/user-placeholder.png')} />}
-                title={<div className="post-author"><h4>{post.author.firstName} {post.author.lastName}</h4><p>{timeDifferenceForDate(post.createdAt)}</p></div>}
-                description={post.text}
+                title={<span>{post.author.firstName} {post.author.lastName}</span>}
+                description={timeDifferenceForDate(post.createdAt)}
               />
+              {post.text}
               {post.imageUrl &&
                 <Card
                   hoverable='true'
-                  style={{margin:'16px 8px', maxHeight:'300px', maxWidth:'300px'}}
+                  className='post-img'
                   cover={<img style={{padding:'5px'}} alt='post attachment' src={post.imageUrl}/>}
-                ></Card>
+                  onClick={this.showModal}
+                />
               }
             </Card>
           )}
         />
+        <Modal
+          // title="Basic Modal"
+          visible={this.state.modalVisible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <img alt='post attachment' src={this.state.modalImg} />
+        </Modal>
       </div>
     )
   }

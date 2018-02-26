@@ -5,7 +5,7 @@ import { CURRENT_USER } from '../../constants'
 import './App.css'
 
 import NavMenu from './NavMenu'
-import SideMenu from './SideMenu'
+import SiderMenu from './SiderMenu'
 import Login from '../Login/Login'
 import Feed from '../Feed/Feed'
 import CourseList from '../CourseList'
@@ -37,9 +37,9 @@ class App extends Component {
               trigger={null}
               collapsible
               collapsed={this.state.collapsed}
-              className='sidemenu'
+              className='sider'
             >
-              <SideMenu />
+              <SiderMenu />
             </Sider>
             <Layout>
               <Header className='navmenu'>

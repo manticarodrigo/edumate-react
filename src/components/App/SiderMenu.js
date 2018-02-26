@@ -7,7 +7,7 @@ import { CURRENT_USER } from '../../constants'
 import { Menu, Popover, Button, Icon } from 'antd'
 const MenuItem = Menu.Item
 
-class SideMenu extends Component {
+class SiderMenu extends Component {
   state = {
     settingsVisible: false,
   }
@@ -22,7 +22,7 @@ class SideMenu extends Component {
   render() {
     const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER))
     const settingsMenu = (
-      <Menu mode='inline' inlineCollapsed={false}>
+      <Menu className='settings-menu' mode='inline' inlineCollapsed={false}>
         <MenuItem>
           <span key='logout' onClick={() => {
             localStorage.removeItem(CURRENT_USER)
@@ -36,7 +36,7 @@ class SideMenu extends Component {
       </Menu>
     )
     return (
-      <div className='sidemenu-content'>
+      <div className='sider-menu'>
         {currentUser && (
           <div className='header'>
             <div className='top'>
@@ -45,7 +45,7 @@ class SideMenu extends Component {
               </div>
               <div className='float-right'>
                 <Popover
-                  placement='bottomRight'
+                  placement='bottomLeft'
                   title='Settings'
                   content={settingsMenu}
                   trigger='click'
@@ -53,7 +53,9 @@ class SideMenu extends Component {
                   onVisibleChange={this.handleSettingsVisibleChange}
                 >
                   <div className='collapsed'>
-                    <img alt='user profile' src={currentUser.imageUrl ? currentUser.imageUrl : require('../../assets/images/user-placeholder.png')} />
+                    <a>
+                      <img alt='user profile' src={currentUser.imageUrl ? currentUser.imageUrl : require('../../assets/images/user-placeholder.png')} />
+                    </a>
                   </div>
                   <div className='uncollapsed'>
                     <Button shape='circle' icon='setting' />
@@ -106,4 +108,4 @@ class SideMenu extends Component {
   }
 }
 
-export default withRouter(SideMenu)
+export default withRouter(SiderMenu)

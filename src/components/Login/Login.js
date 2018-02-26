@@ -154,7 +154,7 @@ class Login extends Component {
     login: true,
     error: '',
     email: {
-       value: ''
+      value: ''
     },
     password: {
       value: ''

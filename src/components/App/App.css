@@ -1,83 +1,87 @@
-.sidemenu {
-  position: relative;
+.sider {
   background-color: #fff;
   border-right: 1px solid #e8e8e8;
-  z-index: 999;
+  box-sizing: content-box;
 }
 
-.sidemenu .sidemenu-content {
+.sider-menu {
+  overflow: hidden;
   position: sticky;
   top: 0px;
-  overflow: hidden;
 }
 
-.sidemenu .sidemenu-content .header {
+.sider-menu,
+.settings-menu {
+  border-right: 0 !important;
+}
+
+.sider-menu .header {
   padding: 1em 1em 0.5em;
   position: relative;
 }
 
-.sidemenu.ant-layout-sider-collapsed .sidemenu-content .header {
+.sider.ant-layout-sider-collapsed .header {
   text-align: center;
 }
 
-.sidemenu .sidemenu-content .header .top {
+.sider-menu .header .top {
   position: relative;
 }
 
-.sidemenu .sidemenu-content .header .top img {
-  width: 35px;
-  height: 35px;
+.sider-menu .header .top img {
+  width: 42.5px;
+  height: 42.5px;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.sidemenu .sidemenu-content .header .top .float-right {
+.sider-menu .header .top .float-right {
   position: absolute;
   top: 0;
   right: 0;
 }
 
-.sidemenu.ant-layout-sider-collapsed .sidemenu-content .header .top .float-right {
+.sider.ant-layout-sider-collapsed .header .top .float-right {
   position: relative;
 }
 
-.sidemenu .sidemenu-content .header .top .collapsed,
-.sidemenu.ant-layout-sider-collapsed .sidemenu-content .header .top button,
-.sidemenu.ant-layout-sider-collapsed .sidemenu-content .header .top .uncollapsed {
+.sider-menu .header .top .collapsed,
+.sider.ant-layout-sider-collapsed .header .top button,
+.sider.ant-layout-sider-collapsed .header .top .uncollapsed {
   display: none;
 }
 
-.sidemenu .sidemenu-content .header .top .collapsed {
+.sider-menu .header .top .collapsed {
   display: none;
 }
 
-.sidemenu.ant-layout-sider-collapsed .sidemenu-content .header .top .collapsed {
+.sider.ant-layout-sider-collapsed .header .top .collapsed {
   display: block;
   position: relative;
 }
 
-.sidemenu .sidemenu-content .header .bottom h4 {
+.sider-menu .header .bottom h4 {
   margin-top: 1em;
-  /* line-height: 1em; */
+  line-height: 1em;
 }
 
-.sidemenu .sidemenu-content .header .bottom p {
+.sider-menu .header .bottom p {
   font-size: 0.8em;
   line-height: 0.25em;
 }
 
-.sidemenu.ant-layout-sider-collapsed .sidemenu-content .header h4,
-.sidemenu.ant-layout-sider-collapsed .sidemenu-content .header p {
+.sider.ant-layout-sider-collapsed .header h4,
+.sider.ant-layout-sider-collapsed .header p {
   display: none;
 }
 
-.sidemenu .ant-menu {
+.sider-menu .ant-menu {
   border-right: none !important;
   max-width: calc(100% - 1px);
 }
 
 @media only screen and (max-width: 750px) {
-  .sidemenu.ant-layout-sider-collapsed {
+  .sider-menu.ant-layout-sider-collapsed {
     width: 0 !important;
     max-width: 0 !important;
     min-width: 0 !important;

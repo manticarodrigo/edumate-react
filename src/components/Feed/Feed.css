@@ -73,3 +73,7 @@
 .post-img .ant-card-body {
 	display: none;
 }
+
+.modal-img img {
+	width: 100%;
+}

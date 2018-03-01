@@ -84,14 +84,15 @@ class Feed extends Component {
                   hoverable='true'
                   className='post-img'
                   cover={<img style={{padding:'5px'}} alt='post attachment' src={post.imageUrl}/>}
-                  onClick={this.showModal}
+                  onClick={() => this.showModal(post.imageUrl)}
                 />
               }
             </Card>
           )}
         />
         <Modal
-          // title="Basic Modal"
+          className='modal-img'
+          title='Post Attachment'
           visible={this.state.modalVisible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}

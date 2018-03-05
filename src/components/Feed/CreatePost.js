@@ -195,11 +195,12 @@ class CreatePost extends Component {
     return new Promise((resolve, reject) => {
       let data = new FormData()
       data.append('data', files[0])
-      // use the file endpoint
-      fetch('https://api.graph.cool/file/v1/cjcyysjgy13rn0150zufcr4jq', {
+      // use the file upload endpoint
+      fetch('http://localhost:4000/upload', {
         method: 'POST',
         body: data
       }).then(response => {
+        console.log(response)
         return response.json()
       }).then(file => {
         if (file) {
@@ -221,8 +222,6 @@ class CreatePost extends Component {
     }
     const poll = pollOptionArr.length > 0 ? { create: { options: { create: pollOptionArr } } } : null
     const imageUrl = this.state.imageUrl
-    console.log(text)
-    console.log(imageUrl)
     await this.props.postMutation({
       variables: {
         text,

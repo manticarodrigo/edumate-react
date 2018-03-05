@@ -219,7 +219,7 @@ class CreatePost extends Component {
         pollOptionArr.push({name: pollOptions[i]})
       }
     }
-    const poll = { create: { options: { create: pollOptionArr } } }
+    const poll = pollOptionArr.length > 0 ? { create: { options: { create: pollOptionArr } } } : null
     const imageUrl = this.state.imageUrl
     console.log(text)
     console.log(imageUrl)

@@ -5,8 +5,8 @@ import { CURRENT_USER } from '../../constants'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
-import { Card, Form, Input, Upload, message, Icon, Button } from 'antd';
-const FormItem = Form.Item;
+import { Card, Form, Input, Upload, message, Icon, Button } from 'antd'
+const FormItem = Form.Item
 
 let uuid = 0
 class CreatePost extends Component {
@@ -45,24 +45,24 @@ class CreatePost extends Component {
   }
 
   handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
+    e.preventDefault()
+    this.props.form.validateFields((error, values) => {
+      if (!error) {
+        console.log('Received values from form: ', values)
         this._createPost(values)
       } else {
-        console.log(err)
+        console.log(error)
       }
-    });
+    })
   }
 
   render() {
     const uploadProps = {
       onRemove: (file) => {
         this.setState(({ fileList }) => {
-          const index = fileList.indexOf(file);
-          const newFileList = fileList.slice();
-          newFileList.splice(index, 1);
+          const index = fileList.indexOf(file)
+          const newFileList = fileList.slice()
+          newFileList.splice(index, 1)
           return {
             fileList: newFileList,
           }
@@ -72,7 +72,7 @@ class CreatePost extends Component {
         this.setState(({ fileList }) => ({
           fileList: [...fileList, file],
         }))
-        return false;
+        return false
       },
       fileList: this.state.fileList,
     }
@@ -136,7 +136,7 @@ class CreatePost extends Component {
               <Input.TextArea
                 name='text'
                 type='text'
-                placeholder='Share something new.'
+                placeholder={this.state.poll ? 'Ask a question.' : 'Share something new.'}
               />
             )}
           </FormItem>
@@ -212,38 +212,43 @@ class CreatePost extends Component {
   }
 
   _submitData = async (data) => {
-    const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER))
     const { text, pollOptions } = data
-    var pollOptionObjects = []
-    for (var i=0; i<pollOptions.length; i++) {
-      pollOptionObjects.push({name: pollOptions[i]})
+    var pollOptionArr = []
+    if (pollOptions) {
+      for (var i=0; i<pollOptions.length; i++) {
+        pollOptionArr.push({name: pollOptions[i]})
+      }
     }
+    const poll = { create: { options: { create: pollOptionArr } } }
     const imageUrl = this.state.imageUrl
     console.log(text)
     console.log(imageUrl)
     await this.props.postMutation({
       variables: {
-        text: text,
-        imageUrl: imageUrl,
-        pollOptions: pollOptionObjects,
-        authorId: currentUser.id
+        text,
+        imageUrl,
+        poll
       }
+    }).catch(error => {
+      console.log(error)
     })
     this.props.history.push(`/`)
   }
 }
 
 const POST_MUTATION = gql`
-  mutation createPost($text: String!, $imageUrl: String, $pollOptions: [PollOption], $authorId: ID!) {
-    createPost(text: $text, imageUrl: $imageUrl, options: $pollOptions, authorId: $authorId) {
+  mutation createPost($text: String!, $imageUrl: String, $poll: PollCreateOneWithoutPostInput) {
+    createPost(
+      text: $text,
+      imageUrl: $imageUrl,
+      poll: $poll
+    ) {
       id
       text
       imageUrl
-      poll {
-        options
-      }
     }
   }
 `
-const WrappedCreatePost = Form.create()(CreatePost);
+
+const WrappedCreatePost = Form.create()(CreatePost)
 export default withRouter(graphql(POST_MUTATION, { name: 'postMutation' })(WrappedCreatePost))

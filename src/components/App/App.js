@@ -26,6 +26,7 @@ class App extends Component {
   }
 
   render() {
+    // localStorage.clear()
     const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER))
     console.log('currentUser:')
     console.log(currentUser)

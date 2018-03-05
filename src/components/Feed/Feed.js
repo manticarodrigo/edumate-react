@@ -8,6 +8,7 @@ import gql from 'graphql-tag'
 import { timeDifferenceForDate } from '../../utils'
 
 import CreatePost from './CreatePost'
+import VoteCheckbox from './VoteCheckbox'
 
 import { List, Card, Icon, Avatar, Spin, Modal, Alert } from 'antd';
 const { Meta } = Card;
@@ -58,7 +59,7 @@ class Feed extends Component {
     }
     
 
-    var postsToRender = this.props.feedQuery.allPosts
+    var postsToRender = this.props.feedQuery.feed
 
     return (
       <div>
@@ -87,6 +88,19 @@ class Feed extends Component {
                   onClick={() => this.showModal(post.imageUrl)}
                 />
               }
+              {post.poll && 
+                <List
+                  bordered
+                  size='small'
+                  className='post-poll'
+                  dataSource={post.poll.options}
+                  renderItem={option => (
+                    <List.Item actions={[<VoteCheckbox />]}>
+                      {option.name}
+                    </List.Item>
+                  )}
+                />
+              }
             </Card>
           )}
         />
@@ -106,18 +120,21 @@ class Feed extends Component {
 
 const FEED_QUERY = gql`
   query FeedQuery {
-    allPosts(
-      orderBy: createdAt_DESC
-    ) {
+    feed {
       id
-      createdAt
-      text
-      imageUrl
       author {
         id
         firstName
         lastName
         imageUrl
+      }
+      createdAt
+      text
+      imageUrl
+      poll {
+        options {
+          name
+        }
       }
     }
   }

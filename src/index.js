@@ -13,14 +13,11 @@ import { ApolloLink } from 'apollo-client-preset'
 
 import { CURRENT_USER } from './constants'
 
-const httpLink = new HttpLink({ uri: 'https://api.graph.cool/simple/v1/cjcyysjgy13rn0150zufcr4jq' })
+const httpLink = new HttpLink({ uri: 'http://localhost:4000' })
 
 const middlewareAuthLink = new ApolloLink((operation, forward) => {
-  var token:any = null
   const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER))
-  if (currentUser) {
-    token = currentUser.token
-  }
+  const token = currentUser ? currentUser.token : null
   const authorizationHeader = token ? `Bearer ${token}` : null
   operation.setContext({
     headers: {

@@ -7,15 +7,13 @@ import registerServiceWorker from './registerServiceWorker'
 
 import { ApolloProvider } from 'react-apollo'
 import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloLink } from 'apollo-client-preset'
+import { createUploadLink } from 'apollo-upload-client'
 
 import { CURRENT_USER } from './constants'
 
-const httpLink = new HttpLink({ uri: 'http://localhost:4000' })
-
-const middlewareAuthLink = new ApolloLink((operation, forward) => {
+const authLink = new ApolloLink((operation, forward) => {
   const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER))
   const token = currentUser ? currentUser.token : null
   const authorizationHeader = token ? `Bearer ${token}` : null
@@ -27,10 +25,8 @@ const middlewareAuthLink = new ApolloLink((operation, forward) => {
   return forward(operation)
 })
 
-const httpLinkWithAuthToken = middlewareAuthLink.concat(httpLink)
-
 const client = new ApolloClient({
-  link: httpLinkWithAuthToken,
+  link: authLink.concat(createUploadLink({ uri: 'http://localhost:4000' })),
   cache: new InMemoryCache()
 })
 

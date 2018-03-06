@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
-import { CURRENT_USER } from '../../constants'
 
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -12,8 +11,7 @@ let uuid = 0
 class CreatePost extends Component {
   state = {
     poll: false,
-    fileList: [],
-    imageUrl: ''
+    fileList: []
   }
 
   removePollOption = (k) => {
@@ -74,7 +72,7 @@ class CreatePost extends Component {
         }))
         return false
       },
-      fileList: this.state.fileList,
+      // fileList: this.state.fileList
     }
     const { getFieldDecorator, getFieldValue } = this.props.form
     const formItemLayout = {
@@ -174,45 +172,6 @@ class CreatePost extends Component {
   }
 
   _createPost = async (data) => {
-    const { fileList } = this.state
-    if (fileList.length > 0) {
-      this._uploadFile(fileList)
-      .then(file => {
-        this.setState({
-          imageUrl: file.url
-        })
-        this._submitData(data)
-      })
-      .catch(error => {
-        message.error(error)
-      })
-    } else {
-      this._submitData(data)
-    }
-  }
-
-  _uploadFile = (files) => {
-    return new Promise((resolve, reject) => {
-      let data = new FormData()
-      data.append('data', files[0])
-      // use the file upload endpoint
-      fetch('http://localhost:4000/upload', {
-        method: 'POST',
-        body: data
-      }).then(response => {
-        console.log(response)
-        return response.json()
-      }).then(file => {
-        if (file) {
-          resolve(file)
-        } else {
-          reject(null)
-        }
-      })
-    })
-  }
-
-  _submitData = async (data) => {
     const { text, pollOptions } = data
     var pollOptionArr = []
     if (pollOptions) {
@@ -221,11 +180,11 @@ class CreatePost extends Component {
       }
     }
     const poll = pollOptionArr.length > 0 ? { create: { options: { create: pollOptionArr } } } : null
-    const imageUrl = this.state.imageUrl
+    const images = this.state.fileList
     await this.props.postMutation({
       variables: {
         text,
-        imageUrl,
+        images,
         poll
       }
     }).catch(error => {
@@ -236,10 +195,10 @@ class CreatePost extends Component {
 }
 
 const POST_MUTATION = gql`
-  mutation createPost($text: String!, $imageUrl: String, $poll: PollCreateOneWithoutPostInput) {
+  mutation createPost($text: String!, $images: [Upload], $poll: PollCreateOneWithoutPostInput) {
     createPost(
       text: $text,
-      imageUrl: $imageUrl,
+      images: $images,
       poll: $poll
     ) {
       id

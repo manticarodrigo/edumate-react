@@ -7,6 +7,7 @@ import gql from 'graphql-tag'
 
 import { timeDifferenceForDate } from '../../utils'
 
+import UploadFile from './UploadFile'
 import CreatePost from './CreatePost'
 import VoteCheckbox from './VoteCheckbox'
 
@@ -63,6 +64,7 @@ class Feed extends Component {
 
     return (
       <div>
+        <UploadFile />
         <CreatePost />
         <List
           itemLayout='vertical'

@@ -7,7 +7,6 @@ import gql from 'graphql-tag'
 
 import { timeDifferenceForDate } from '../../utils'
 
-import UploadFile from './UploadFile'
 import CreatePost from './CreatePost'
 import VoteCheckbox from './VoteCheckbox'
 
@@ -61,10 +60,10 @@ class Feed extends Component {
     
 
     var postsToRender = this.props.feedQuery.feed
+    console.log(postsToRender)
 
     return (
       <div>
-        <UploadFile />
         <CreatePost />
         <List
           itemLayout='vertical'
@@ -97,7 +96,7 @@ class Feed extends Component {
                   className='post-poll'
                   dataSource={post.poll.options}
                   renderItem={option => (
-                    <List.Item actions={[<VoteCheckbox />]}>
+                    <List.Item actions={[<VoteCheckbox option={option} />]}>
                       {option.name}
                     </List.Item>
                   )}
@@ -135,6 +134,7 @@ const FEED_QUERY = gql`
       imageUrl
       poll {
         options {
+          id
           name
         }
       }

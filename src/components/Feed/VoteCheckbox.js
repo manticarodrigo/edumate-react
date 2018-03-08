@@ -10,12 +10,10 @@ import { Checkbox } from 'antd';
 
 class VoteCheckbox extends Component {
   onChange = (e) => {
-    const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER))
-    console.log(e);
+    const optionId = this.props.option.id
     this.props.voteMutation({
       variables: {
-        // id: option.id,
-        authorId: currentUser.id
+        optionId
       }
     })
     // this.props.history.push(`/`)
@@ -28,9 +26,9 @@ class VoteCheckbox extends Component {
 }
 
 const VOTE_MUTATION = gql`
-  mutation VoteMutation($authorId: ID!) {
+  mutation VoteMutation($optionId: ID!) {
     createVote(
-      authorId: $authorId
+      optionId: $optionId
     ) {
       id
     }

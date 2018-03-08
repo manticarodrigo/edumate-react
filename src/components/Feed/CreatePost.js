@@ -72,7 +72,7 @@ class CreatePost extends Component {
         }))
         return false
       },
-      // fileList: this.state.fileList
+      // fileList: this.state.fileList,
     }
     const { getFieldDecorator, getFieldValue } = this.props.form
     const formItemLayout = {

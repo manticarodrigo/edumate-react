@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { CURRENT_USER } from '../../constants'
 
 import './Feed.css'
 
@@ -20,7 +19,13 @@ class VoteCheckbox extends Component {
   }
   render() {
     return (
-      <Checkbox onChange={this.onChange} />
+      <div>
+        {this.props.option.votes.indexOf(this.props.currentUser.id) ? (
+          <Checkbox checked disabled />
+        ) : (
+          <Checkbox onChange={this.onChange} />
+        )}
+      </div>
     )
   }
 }

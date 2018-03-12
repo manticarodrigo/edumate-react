@@ -4,7 +4,7 @@ import { withRouter } from 'react-router'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
-import { Card, Form, Input, Upload, message, Icon, Button } from 'antd'
+import { Card, Form, Input, Upload, Icon, Button } from 'antd'
 const FormItem = Form.Item
 
 let uuid = 0

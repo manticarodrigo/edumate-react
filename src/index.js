@@ -1,9 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
-import './index.css'
-import App from './components/App/App'
 import registerServiceWorker from './registerServiceWorker'
+
+import App from './components/App/App'
+import './index.css'
 
 import { ApolloProvider } from 'react-apollo'
 import { ApolloClient } from 'apollo-client'
@@ -11,11 +12,8 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloLink } from 'apollo-client-preset'
 import { createUploadLink } from 'apollo-upload-client'
 
-import { CURRENT_USER } from './constants'
-
 const authLink = new ApolloLink((operation, forward) => {
-  const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER))
-  const token = currentUser ? currentUser.token : null
+  const token = localStorage.getItem('authToken')
   const authorizationHeader = token ? `Bearer ${token}` : null
   operation.setContext({
     headers: {
@@ -31,11 +29,11 @@ const client = new ApolloClient({
 })
 
 ReactDOM.render(
-  <BrowserRouter>
-    <ApolloProvider client={client}>
+  <ApolloProvider client={client}>
+    <BrowserRouter>
       <App />
-    </ApolloProvider>
-  </BrowserRouter>
+    </BrowserRouter>
+  </ApolloProvider>
   , document.getElementById('root')
 )
 registerServiceWorker()

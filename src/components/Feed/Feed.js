@@ -38,8 +38,8 @@ class Feed extends Component {
     })
   }
   render() {
-
-    const spinnerIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+    const currentUser = this.props.currentUser
+    const spinnerIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />
 
     if (this.props.feedQuery && this.props.feedQuery.loading) {
       return <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', margin:'0'}}><Spin indicator={spinnerIcon}/> LOADING</div>
@@ -58,10 +58,8 @@ class Feed extends Component {
       )
     }
     
-
     var postsToRender = this.props.feedQuery.feed
     console.log(postsToRender)
-
     return (
       <div>
         <CreatePost />
@@ -96,7 +94,7 @@ class Feed extends Component {
                   className='post-poll'
                   dataSource={post.poll.options}
                   renderItem={option => (
-                    <List.Item actions={[<VoteCheckbox option={option} />]}>
+                    <List.Item actions={[<VoteCheckbox option={option} currentUser={currentUser} />]}>
                       {option.name}
                     </List.Item>
                   )}
@@ -136,6 +134,9 @@ const FEED_QUERY = gql`
         options {
           id
           name
+          votes {
+            id
+          }
         }
       }
     }

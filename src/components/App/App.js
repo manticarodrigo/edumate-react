@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { CURRENT_USER } from '../../constants'
+import { withRouter } from 'react-router'
+
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 import './App.css'
 
+import Loading from './Loading'
 import NavMenu from './NavMenu'
 import SiderMenu from './SiderMenu'
 import Login from '../Login/Login'
@@ -11,44 +15,58 @@ import Feed from '../Feed/Feed'
 import CourseList from '../CourseList'
 import Schedule from '../Schedule'
 
-import { Layout } from 'antd';
-const { Header, Sider, Content } = Layout;
+import { Layout } from 'antd'
+const { Header, Sider, Content } = Layout
 
 class App extends Component {
   state = {
-    collapsed: false
+    siderCollapsed: false
   }
 
-  toggle = () => {
+  _toggleSider = () => {
     this.setState({
-      collapsed: !this.state.collapsed
+      siderCollapsed: !this.state.siderCollapsed
     })
   }
 
+  _showLogin = () => {
+    this.props.history.replace('/login')
+  }
+
+  _isLoggedIn = () => {
+    return this.props.authQuery.user && this.props.authQuery.user.id !== null
+  }
+
   render() {
-    // localStorage.clear()
-    const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER))
-    console.log('currentUser:')
-    console.log(currentUser)
+    if (this.props.authQuery && this.props.authQuery.error) {
+      console.log('AUTH ERROR:', this.props.authQuery.error.graphQLErrors[0].message)
+    }
+    
+    if (this.props.authQuery && this.props.authQuery.loading) {
+        return <Loading/>
+    }
+
+    const currentUser = this.props.authQuery.user
+    
     return (
-      <div className='app-container'>
+      <div>
         {currentUser ? (
           <Layout>
             <Sider
               trigger={null}
               collapsible
-              collapsed={this.state.collapsed}
+              collapsed={this.state.siderCollapsed}
               className='sider'
             >
-              <SiderMenu />
+              <SiderMenu currentUser={currentUser} />
             </Sider>
             <Layout>
               <Header className='navmenu'>
-                <NavMenu action={this.toggle} state={this.state} />
+                <NavMenu action={this._toggleSider} state={this.state} />
               </Header>
               <Content className='main-content'>
                 <Switch>
-                  <Route exact path='/' component={Feed} />
+                  <Route exact path='/' render={(props)=><Feed {...props} currentUser={currentUser} />} />
                   <Route exact path='/courses' component={CourseList} />
                   <Route exact path='/schedule' component={Schedule} />
                 </Switch>
@@ -57,7 +75,7 @@ class App extends Component {
           </Layout>
         ) : (
           <Content>
-            <Route exact path='/' component={Login} />
+            <Route path='/' component={Login} />
           </Content>
         )}
       </div>
@@ -65,4 +83,23 @@ class App extends Component {
   }
 }
 
-export default App
+const AUTH_QUERY = gql`
+  query {
+    user {
+      id
+      email
+      username
+      firstName
+      lastName
+      imageUrl
+      votesCasted {
+        id
+      }
+    }
+  }
+`
+
+export default graphql(AUTH_QUERY, {
+  name: 'authQuery',
+  options: { fetchPolicy: 'network-only' }
+})(withRouter(App))

@@ -1,3 +1,18 @@
+.loading-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: #0D99FC;
+}
+
+.loading-container .loading-content {
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .sider {
   background-color: #fff;
   border-right: 1px solid #e8e8e8;

@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { withRouter } from 'react-router'
 
-import { CURRENT_USER } from '../../constants'
-
 import { Menu, Popover, Button, Icon } from 'antd'
 const MenuItem = Menu.Item
 
@@ -20,17 +18,17 @@ class SiderMenu extends Component {
     this.setState({ settingsVisible });
   }
   render() {
-    const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER))
+    const currentUser = this.props.currentUser
     const settingsMenu = (
       <Menu className='settings-menu' mode='inline' inlineCollapsed={false}>
         <MenuItem>
           <span key='logout' onClick={() => {
-            localStorage.removeItem(CURRENT_USER)
-            this.props.history.push(`/`)
-            console.log('logout pressed')
+            // remove token from local storage and reload page to reset apollo client
+            localStorage.removeItem('authToken')
+            window.location.reload()
           }}>
             <Icon type='logout' />
-            <span>Logout</span>
+            <span> Logout</span>
           </span>
         </MenuItem>
       </Menu>

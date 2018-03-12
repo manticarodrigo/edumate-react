@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { CURRENT_USER } from '../../constants'
 
 import './Login.css'
 
@@ -131,7 +130,7 @@ class Login extends Component {
         this.state.error = error.graphQLErrors[0].message
       })
       if (result) {
-        this._saveUserData(result.data.login)
+        this._saveAuthToken(result.data.login.token)
       }
     } else {
       const result = await this.props.registerMutation({
@@ -147,19 +146,16 @@ class Login extends Component {
         this.state.error = error.graphQLErrors[0].message
       })
       if (result) {
-        this._saveUserData(result.data.register)
+        this._saveAuthToken(result.data.register.token)
       }
     }
-    this.props.history.push(`/`)
   }
 
-  _saveUserData = (data) => {
-    console.log(data)
-    const { token, user } = data
-    const strObj = JSON.stringify({ token, ...user })
-    console.log('saving user to local storage:')
-    console.log(strObj)
-    localStorage.setItem(CURRENT_USER, strObj)
+  _saveAuthToken = (token) => {
+    console.log('saving token to local storage:')
+    console.log(token)
+    localStorage.setItem('authToken', token)
+    window.location.reload()
   }
 }
 
@@ -180,10 +176,6 @@ const REGISTER_MUTATION = gql`
       token
       user {
         id
-        username
-        email
-        firstName
-        lastName
       }
     }
   }
@@ -195,11 +187,6 @@ const LOGIN_MUTATION = gql`
       token
       user {
         id
-        username
-        email
-        firstName
-        lastName
-        imageUrl
       }
     }
   }

@@ -5,7 +5,7 @@ import './Feed.css'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
-import { timeDifferenceForDate } from '../../utils'
+import { timeDifferenceForDate, timeLeftForDate } from '../../utils'
 
 import { Card, List, Checkbox, Icon, Avatar, Modal } from 'antd'
 const { Meta } = Card
@@ -84,24 +84,30 @@ class Post extends Component {
   _renderPoll(poll) {
     const currentUser = this.props.currentUser
     var match = null
+    var totalVotes = 0
     poll.options.forEach(option => {
+      totalVotes += option.votes.length
       const result = currentUser.votesCasted.filter(function( vote ) {
         return vote.option.id === option.id
       })
       match = result[0] ? result[0] : match
     })
     return (
-      <List
-        bordered
-        size='small'
+      <Card 
         className='post-poll'
-        dataSource={poll.options}
-        renderItem={option => (
-          <List.Item actions={[ (match ? (match.option.id === option.id ? <Checkbox checked disabled /> : null) : <Checkbox onChange={this.onCheckboxChange} />) ]}>
-            {option.name}
-          </List.Item>
-        )}
-      />
+        actions={[<span className='info'><strong>{totalVotes}</strong> votes</span>, <span>{poll.endDate ? timeLeftForDate(poll.endDate) : 'Ongoing'}</span>]}
+      >
+        <List
+          size='small'
+          dataSource={poll.options}
+          renderItem={option => (
+            <List.Item className='option' actions={[ (match ? (match.option.id === option.id ? <Checkbox checked disabled /> : null) : <Checkbox onChange={this.onCheckboxChange} />) ]}>
+              <span className='percentage' style={{ width: (option.votes.length/totalVotes)*100 + '%'}} />
+              <span className='name'>{option.name} <strong>({(option.votes.length/totalVotes)*100 + '%'})</strong></span>
+            </List.Item>
+          )}
+        />
+      </Card>
     )
   }
 }

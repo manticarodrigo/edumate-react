@@ -79,7 +79,6 @@ class CreatePost extends Component {
 
     getFieldDecorator('optionKeys', { initialValue: [0, 1] })
     const optionKeys = getFieldValue('optionKeys')
-    console.log(optionKeys)
     const formItems = optionKeys.map((k, index) => {
       return (
         <FormItem
@@ -131,7 +130,7 @@ class CreatePost extends Component {
                   <Icon type="plus" /> Add poll option
                 </Button>
               </FormItem>
-              <FormItem>
+              <FormItem style={{ position: 'absolute', top: '24px', right: '24px', width: '40%' }}>
                 {getFieldDecorator('pollEndDate', {
                   rules: [{ required: true, message: 'End date is required!' }],
                 }) (
@@ -140,7 +139,7 @@ class CreatePost extends Component {
                     name='pollEndDate'
                     format="YYYY-MM-DD HH:mm"
                     placeholder="End date"
-                    style={{ float: 'right', width: '40%' }}
+                    style={{ width: '100%' }}
                   />
                 )}
               </FormItem>

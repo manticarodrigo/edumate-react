@@ -39,7 +39,7 @@ class App extends Component {
 
   render() {
     if (this.props.authQuery && this.props.authQuery.error) {
-      console.log('AUTH ERROR:', this.props.authQuery.error.graphQLErrors[0].message)
+      console.log('AUTH ERROR:', this.props.authQuery.error)
     }
     
     if (this.props.authQuery && this.props.authQuery.loading) {
@@ -94,6 +94,9 @@ const AUTH_QUERY = gql`
       imageUrl
       votesCasted {
         id
+        option {
+          id
+        }
       }
     }
   }

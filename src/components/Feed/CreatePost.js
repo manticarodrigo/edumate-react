@@ -55,25 +55,6 @@ class CreatePost extends Component {
   }
 
   render() {
-    const uploadProps = {
-      onRemove: (file) => {
-        this.setState(({ fileList }) => {
-          const index = fileList.indexOf(file)
-          const newFileList = fileList.slice()
-          newFileList.splice(index, 1)
-          return {
-            fileList: newFileList,
-          }
-        })
-      },
-      beforeUpload: (file) => {
-        this.setState(({ fileList }) => ({
-          fileList: [...fileList, file],
-        }))
-        return false
-      },
-      fileList: this.state.fileList,
-    }
     const { getFieldDecorator, getFieldValue } = this.props.form
     const formItemLayout = {
       labelCol: {
@@ -122,6 +103,25 @@ class CreatePost extends Component {
         </FormItem>
       )
     })
+    const uploadProps = {
+      onRemove: (file) => {
+        this.setState(({ fileList }) => {
+          const index = fileList.indexOf(file)
+          const newFileList = fileList.slice()
+          newFileList.splice(index, 1)
+          return {
+            fileList: newFileList,
+          }
+        })
+      },
+      beforeUpload: (file) => {
+        this.setState(({ fileList }) => ({
+          fileList: [...fileList, file],
+        }))
+        return false
+      },
+      fileList: this.state.fileList,
+    }
     return (
       <Card
         className='create-post-card'
@@ -173,14 +173,7 @@ class CreatePost extends Component {
 
   _createPost = async (data) => {
     const { text, pollOptions } = data
-    // var pollOptionArr = []
-    // if (pollOptions) {
-    //   for (var i=0; i<pollOptions.length; i++) {
-    //     pollOptionArr.push({name: pollOptions[i]})
-    //   }
-    // }
-    // const poll = pollOptionArr.length > 0 ? { create: { options: { create: pollOptionArr } } } : null
-    const files = this.state.fileList.length > 0 ? this.state.fileList : null
+    const files = this.state.fileList
     await this.props.postMutation({
       variables: {
         text,

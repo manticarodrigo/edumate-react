@@ -18,7 +18,6 @@ class VoteCheckbox extends Component {
     // this.props.history.replace(`/`)
   }
   render() {
-    // console.log(this.props.option.votes.indexOf(this.props.currentUser.id))
     return (
       <Checkbox onChange={this.onChange} />
     )

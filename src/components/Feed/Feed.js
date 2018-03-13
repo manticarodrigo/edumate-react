@@ -10,7 +10,7 @@ import { timeDifferenceForDate } from '../../utils'
 import CreatePost from './CreatePost'
 import VoteCheckbox from './VoteCheckbox'
 
-import { List, Card, Icon, Avatar, Spin, Modal, Alert } from 'antd';
+import { List, Card, Checkbox, Icon, Avatar, Spin, Modal, Alert } from 'antd';
 const { Meta } = Card;
 
 class Feed extends Component {
@@ -19,20 +19,17 @@ class Feed extends Component {
     modalImg: ''
   }
   showModal = (imageUrl) => {
-    console.log(imageUrl)
     this.setState({
       modalVisible: true,
       modalImg: imageUrl
     })
   }
   handleOk = (e) => {
-    console.log(e);
     this.setState({
       modalVisible: false,
     })
   }
   handleCancel = (e) => {
-    console.log(e);
     this.setState({
       modalVisible: false,
     })
@@ -95,7 +92,7 @@ class Feed extends Component {
                   className='post-poll'
                   dataSource={post.poll.options}
                   renderItem={option => (
-                    <List.Item actions={[<VoteCheckbox option={option} currentUser={currentUser} />]}>
+                    <List.Item actions={[ (this._votedInPoll(post.poll) ? (this._votedInPoll(post.poll) == option.id ? <Checkbox checked disabled /> : null) : <VoteCheckbox option={option} />) ]}>
                       {option.name}
                     </List.Item>
                   )}
@@ -115,6 +112,19 @@ class Feed extends Component {
         </Modal>
       </div>
     )
+  }
+
+  _votedInPoll(poll) {
+    const currentUser = this.props.currentUser
+    var match = null
+    poll.options.map(option => {
+      currentUser.votesCasted.filter(function( vote ) {
+        if (vote.option.id === option.id) {
+          match = option.id
+        }
+      })
+    })
+    return match ? match : null
   }
 }
 

@@ -4,10 +4,10 @@ import { withRouter } from 'react-router'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
-import { Card, Form, Input, Upload, Icon, Button } from 'antd'
+import { Card, Form, Input, Upload, Icon, Button, DatePicker } from 'antd'
 const FormItem = Form.Item
 
-let uuid = 0
+let uuid = 2
 class CreatePost extends Component {
   state = {
     poll: false,
@@ -55,54 +55,6 @@ class CreatePost extends Component {
   }
 
   render() {
-    const { getFieldDecorator, getFieldValue } = this.props.form
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 4 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 20 },
-      },
-    }
-    const formItemLayoutWithOutLabel = {
-      wrapperCol: {
-        xs: { span: 24, offset: 0 },
-        sm: { span: 20, offset: 4 },
-      },
-    }
-    getFieldDecorator('optionKeys', { initialValue: [] })
-    const optionKeys = getFieldValue('optionKeys')
-    const formItems = optionKeys.map((k, index) => {
-      return (
-        <FormItem
-          {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-          label={index === 0 ? 'Poll options' : ''}
-          required={false}
-          key={k}
-        >
-          {getFieldDecorator(`pollOptions[${k}]`, {
-            validateTrigger: ['onChange', 'onBlur'],
-            rules: [{
-              required: true,
-              whitespace: true,
-              message: "Please enter an option or delete this field.",
-            }],
-          })(
-            <Input placeholder="option name" style={{ width: '60%', marginRight: 8 }} />
-          )}
-          {optionKeys.length > 1 ? (
-            <Icon
-              className="dynamic-delete-button"
-              type="minus-circle-o"
-              disabled={optionKeys.length === 1}
-              onClick={() => this.removePollOption(k)}
-            />
-          ) : null}
-        </FormItem>
-      )
-    })
     const uploadProps = {
       onRemove: (file) => {
         this.setState(({ fileList }) => {
@@ -122,6 +74,39 @@ class CreatePost extends Component {
       },
       fileList: this.state.fileList,
     }
+
+    const { getFieldDecorator, getFieldValue } = this.props.form
+
+    getFieldDecorator('optionKeys', { initialValue: [0, 1] })
+    const optionKeys = getFieldValue('optionKeys')
+    console.log(optionKeys)
+    const formItems = optionKeys.map((k, index) => {
+      return (
+        <FormItem
+          required={false}
+          key={k}
+        >
+          {getFieldDecorator(`pollOptions[${k}]`, {
+            validateTrigger: ['onChange', 'onBlur'],
+            rules: [{
+              required: true,
+              whitespace: true,
+              message: "Please enter an option or delete this field.",
+            }],
+          })(
+            <Input placeholder={'Option ' + (k+1)} style={{ width: '50%', marginRight: 8 }} />
+          )}
+          {optionKeys.length > 2 ? (
+            <Icon
+              className="dynamic-delete-button"
+              type="minus-circle-o"
+              disabled={optionKeys.length === 1}
+              onClick={() => this.removePollOption(k)}
+            />
+          ) : null}
+        </FormItem>
+      )
+    })
     return (
       <Card
         className='create-post-card'
@@ -139,14 +124,27 @@ class CreatePost extends Component {
             )}
           </FormItem>
           {this.state.poll && (
-            <div>
+            <Card style={{ margin: '16px 0'}}>
               {formItems}
-              <FormItem {...formItemLayoutWithOutLabel}>
-                <Button type="dashed" onClick={this.addPollOption} style={{ width: '60%' }}>
+              <FormItem>
+                <Button type="dashed" onClick={this.addPollOption} style={{ width: '50%' }}>
                   <Icon type="plus" /> Add poll option
                 </Button>
               </FormItem>
-            </div>
+              <FormItem>
+                {getFieldDecorator('pollEndDate', {
+                  rules: [{ required: true, message: 'End date is required!' }],
+                }) (
+                  <DatePicker
+                    showTime
+                    name='pollEndDate'
+                    format="YYYY-MM-DD HH:mm"
+                    placeholder="End date"
+                    style={{ float: 'right', width: '40%' }}
+                  />
+                )}
+              </FormItem>
+            </Card>
           )}
         </Form>
         <div className='buttons-row'>
@@ -172,13 +170,14 @@ class CreatePost extends Component {
   }
 
   _createPost = async (data) => {
-    const { text, pollOptions } = data
+    const { text, pollOptions, pollEndDate } = data
     const files = this.state.fileList
     await this.props.postMutation({
       variables: {
         text,
         files,
-        pollOptions
+        pollOptions,
+        pollEndDate
       }
     }).catch(error => {
       console.log(error)
@@ -188,11 +187,12 @@ class CreatePost extends Component {
 }
 
 const POST_MUTATION = gql`
-  mutation createPost($text: String!, $files: [Upload], $pollOptions: [String]) {
+  mutation createPost($text: String!, $files: [Upload], $pollOptions: [String], $pollEndDate: DateTime) {
     createPost(
       text: $text,
       files: $files,
-      pollOptions: $pollOptions
+      pollOptions: $pollOptions,
+      pollEndDate: $pollEndDate
     ) {
       id
     }

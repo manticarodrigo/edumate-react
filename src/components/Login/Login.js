@@ -16,7 +16,7 @@ class Login extends Component {
     error: ''
   }
   toggleState = () => {
-    this.setState({login: !this.state.login})
+    this.setState({login: !this.state.login, error: ''})
   }
   onSubmit = () => {
     this.props.form.validateFields((error, values) => {
@@ -127,7 +127,10 @@ class Login extends Component {
         },
       }).catch(error => {
         console.log(JSON.parse(JSON.stringify(error)))
-        this.state.error = error.graphQLErrors[0].message
+        const message = error.graphQLErrors[0].message
+        this.setState({
+          error: message
+        })
       })
       if (result) {
         this._saveAuthToken(result.data.login.token)
@@ -143,7 +146,10 @@ class Login extends Component {
         },
       }).catch(error => {
         console.log(JSON.parse(JSON.stringify(error)))
-        this.state.error = error.graphQLErrors[0].message
+        const message = error.graphQLErrors[0].message
+        this.setState({
+          error: message
+        })
       })
       if (result) {
         this._saveAuthToken(result.data.register.token)

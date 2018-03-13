@@ -15,17 +15,12 @@ class VoteCheckbox extends Component {
         optionId
       }
     })
-    // this.props.history.push(`/`)
+    // this.props.history.replace(`/`)
   }
   render() {
+    // console.log(this.props.option.votes.indexOf(this.props.currentUser.id))
     return (
-      <div>
-        {this.props.option.votes.indexOf(this.props.currentUser.id) ? (
-          <Checkbox checked disabled />
-        ) : (
-          <Checkbox onChange={this.onChange} />
-        )}
-      </div>
+      <Checkbox onChange={this.onChange} />
     )
   }
 }

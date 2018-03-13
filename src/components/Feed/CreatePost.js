@@ -72,7 +72,7 @@ class CreatePost extends Component {
         }))
         return false
       },
-      // fileList: this.state.fileList,
+      fileList: this.state.fileList,
     }
     const { getFieldDecorator, getFieldValue } = this.props.form
     const formItemLayout = {
@@ -173,19 +173,19 @@ class CreatePost extends Component {
 
   _createPost = async (data) => {
     const { text, pollOptions } = data
-    var pollOptionArr = []
-    if (pollOptions) {
-      for (var i=0; i<pollOptions.length; i++) {
-        pollOptionArr.push({name: pollOptions[i]})
-      }
-    }
-    const poll = pollOptionArr.length > 0 ? { create: { options: { create: pollOptionArr } } } : null
-    const images = this.state.fileList
+    // var pollOptionArr = []
+    // if (pollOptions) {
+    //   for (var i=0; i<pollOptions.length; i++) {
+    //     pollOptionArr.push({name: pollOptions[i]})
+    //   }
+    // }
+    // const poll = pollOptionArr.length > 0 ? { create: { options: { create: pollOptionArr } } } : null
+    const files = this.state.fileList.length > 0 ? this.state.fileList : null
     await this.props.postMutation({
       variables: {
         text,
-        images,
-        poll
+        files,
+        pollOptions
       }
     }).catch(error => {
       console.log(error)
@@ -195,15 +195,13 @@ class CreatePost extends Component {
 }
 
 const POST_MUTATION = gql`
-  mutation createPost($text: String!, $images: [Upload], $poll: PollCreateOneWithoutPostInput) {
+  mutation createPost($text: String!, $files: [Upload], $pollOptions: [String]) {
     createPost(
       text: $text,
-      images: $images,
-      poll: $poll
+      files: $files,
+      pollOptions: $pollOptions
     ) {
       id
-      text
-      imageUrl
     }
   }
 `

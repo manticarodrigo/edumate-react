@@ -75,7 +75,7 @@ class App extends Component {
           </Layout>
         ) : (
           <Content>
-            <Route path='/' component={Login} />
+            <Login />
           </Content>
         )}
       </div>

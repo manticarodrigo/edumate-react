@@ -79,14 +79,15 @@ class Feed extends Component {
                 description={timeDifferenceForDate(post.createdAt)}
               />
               {post.text}
-              {post.imageUrl &&
+              {post.images.map(image => 
                 <Card
+                  key={image.id}
                   hoverable='true'
                   className='post-img'
-                  cover={<img style={{padding:'5px'}} alt='post attachment' src={post.imageUrl}/>}
-                  onClick={() => this.showModal(post.imageUrl)}
-                />
-              }
+                  cover={<img style={{padding:'5px'}} alt='post attachment' src={image.url}/>}
+                  onClick={() => this.showModal(image.url)}
+                /> 
+              )}
               {post.poll && 
                 <List
                   bordered
@@ -121,21 +122,26 @@ const FEED_QUERY = gql`
   query FeedQuery {
     feed {
       id
+      createdAt
       author {
         id
         firstName
         lastName
         imageUrl
       }
-      createdAt
       text
-      imageUrl
+      images {
+        id
+        url
+      }
       poll {
         options {
           id
           name
           votes {
-            id
+            user {
+              id
+            }
           }
         }
       }

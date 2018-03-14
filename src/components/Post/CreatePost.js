@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 
+import './Post.css'
+
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -131,7 +133,7 @@ class CreatePost extends Component {
           })(
             <Input placeholder={'Option ' + (k+1)} style={{ width: '50%', marginRight: 8 }} />
           )}
-          {optionKeys.length > 2 ? (
+          {optionKeys.length > 2 && k === (optionKeys.length - 1) ? (
             <Icon
               className="dynamic-delete-button"
               type="minus-circle-o"

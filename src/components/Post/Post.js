@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 
-import './Feed.css'
+import './Post.css'
 
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -22,8 +22,8 @@ class Post extends Component {
       modalImage: image
     })
   }
-  onCheckboxChange = (e) => {
-    const optionId = this.props.option.id
+  voteOnOption = (option) => {
+    const optionId = option.id
     this.props.voteMutation({
       variables: {
         optionId
@@ -98,7 +98,7 @@ class Post extends Component {
           size='small'
           dataSource={poll.options}
           renderItem={option => (
-            <List.Item className='option' actions={[ (match ? (match.option.id === option.id ? <Checkbox checked disabled /> : null) : <Checkbox onChange={this.onCheckboxChange} />) ]}>
+            <List.Item className='option' actions={[ (match ? (match.option.id === option.id ? <Checkbox checked disabled /> : null) : <Checkbox onChange={() => this.voteOnOption(option)} />) ]}>
               <span className='percentage' style={{ width: (option.votes.length/totalVotes)*100 + '%'}} />
               <span className='name'>{option.name} <strong>({option.votes.length > 0 ? (option.votes.length/totalVotes)*100 + '%' : '0%'})</strong></span>
             </List.Item>

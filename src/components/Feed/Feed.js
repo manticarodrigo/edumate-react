@@ -5,8 +5,8 @@ import './Feed.css'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
-import CreatePost from './CreatePost'
-import Post from './Post'
+import CreatePost from '../Post/CreatePost'
+import Post from '../Post/Post'
 
 import { List, Icon, Spin, Alert } from 'antd'
 

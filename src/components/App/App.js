@@ -91,7 +91,10 @@ const AUTH_QUERY = gql`
       username
       firstName
       lastName
-      imageUrl
+      image {
+        id
+        url
+      }
       votesCasted {
         id
         option {

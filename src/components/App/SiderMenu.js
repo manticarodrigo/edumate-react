@@ -39,7 +39,7 @@ class SiderMenu extends Component {
           <div className='header'>
             <div className='top'>
               <div className='uncollapsed'>
-                <img alt='user profile' src={currentUser.imageUrl ? currentUser.imageUrl : require('../../assets/images/user-placeholder.png')} />
+                <img alt='user profile' src={currentUser.image ? currentUser.image.url : require('../../assets/images/user-placeholder.png')} />
               </div>
               <div className='float-right'>
                 <Popover
@@ -52,7 +52,7 @@ class SiderMenu extends Component {
                 >
                   <div className='collapsed'>
                     <a>
-                      <img alt='user profile' src={currentUser.imageUrl ? currentUser.imageUrl : require('../../assets/images/user-placeholder.png')} />
+                      <img alt='user profile' src={currentUser.image ? currentUser.image.url : require('../../assets/images/user-placeholder.png')} />
                     </a>
                   </div>
                   <div className='uncollapsed'>

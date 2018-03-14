@@ -29,7 +29,8 @@ class Post extends Component {
         optionId
       }
     })
-    this.props.history.replace(`/`)
+    this.props.feedQuery.refetch()
+    // need to solve rerender this.setState(this.state)
   }
   render() {
     const post = this.props.post

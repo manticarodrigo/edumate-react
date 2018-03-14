@@ -59,7 +59,9 @@ const FEED_QUERY = gql`
         id
         firstName
         lastName
-        imageUrl
+        image {
+          url
+        }
       }
       text
       images {

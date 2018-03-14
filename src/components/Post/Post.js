@@ -42,7 +42,7 @@ class Post extends Component {
           actions={[<div><Icon type='like-o' /> Like</div>, <div><Icon type='form' /> Comment</div>, <div><Icon type='export' /> Share</div>]}
         >
           <Meta
-            avatar={<Avatar src={post.author.imageUrl ? post.author.imageUrl : require('../../assets/images/user-placeholder.png')} />}
+            avatar={<Avatar src={post.author.image ? post.author.image.url : require('../../assets/images/user-placeholder.png')} />}
             title={<span>{post.author.firstName} {post.author.lastName}</span>}
             description={timeDifferenceForDate(post.createdAt)}
           />

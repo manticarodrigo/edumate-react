@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router'
 
 import './Feed.css'
 
@@ -8,27 +9,17 @@ import gql from 'graphql-tag'
 import { timeDifferenceForDate, timeLeftForDate } from '../../utils'
 
 import { Card, List, Checkbox, Icon, Avatar, Modal } from 'antd'
-const { Meta } = Card
+const { Meta, Grid } = Card
 
 class Post extends Component {
   state = {
     modalVisible: false,
-    modalImg: ''
+    modalImage: null
   }
-  showModal = (imageUrl) => {
+  showModal = (image) => {
     this.setState({
       modalVisible: true,
-      modalImg: imageUrl
-    })
-  }
-  handleOk = (e) => {
-    this.setState({
-      modalVisible: false,
-    })
-  }
-  handleCancel = (e) => {
-    this.setState({
-      modalVisible: false,
+      modalImage: image
     })
   }
   onCheckboxChange = (e) => {
@@ -38,7 +29,7 @@ class Post extends Component {
         optionId
       }
     })
-    // this.props.history.replace(`/`)
+    this.props.history.replace(`/`)
   }
   render() {
     const post = this.props.post
@@ -55,28 +46,34 @@ class Post extends Component {
             description={timeDifferenceForDate(post.createdAt)}
           />
           {post.text}
-          {post.images.map(image => 
-            <Card
-              key={image.id}
-              hoverable='true'
-              className='post-img'
-              cover={<img style={{padding:'5px'}} alt='post attachment' src={image.url}/>}
-              onClick={() => this.showModal(image.url)}
-            /> 
-          )}
+          {post.images && post.images.length > 0 &&
+            <Card 
+              className='image-card'
+              style={{ width: post.images.length === 1 ? '50%' : '100%' }}
+            >
+              {post.images.map(image => 
+                <Grid
+                  key={image.id}
+                  className='image-grid'
+                  style={{ width: post.images.length === 1 ? '100%' : '50%' }}
+                >
+                  <img
+                    className='post-image'
+                    alt={image.filename}
+                    src={image.url}
+                    onClick={() => this.showModal(image)}
+                  />
+                </Grid>
+              )}
+            </Card>
+          }
           {post.poll && 
             this._renderPoll(post.poll)
           }
+          {this.state.modalVisible &&
+            this._renderModal()
+          }
         </Card>
-        <Modal
-          className='modal-img'
-          title='Post Attachment'
-          visible={this.state.modalVisible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-        >
-          <img alt='post attachment' src={this.state.modalImg} />
-        </Modal>
       </div>
     )
   }
@@ -103,11 +100,26 @@ class Post extends Component {
           renderItem={option => (
             <List.Item className='option' actions={[ (match ? (match.option.id === option.id ? <Checkbox checked disabled /> : null) : <Checkbox onChange={this.onCheckboxChange} />) ]}>
               <span className='percentage' style={{ width: (option.votes.length/totalVotes)*100 + '%'}} />
-              <span className='name'>{option.name} <strong>({(option.votes.length/totalVotes)*100 + '%'})</strong></span>
+              <span className='name'>{option.name} <strong>({option.votes.length > 0 ? (option.votes.length/totalVotes)*100 + '%' : '0%'})</strong></span>
             </List.Item>
           )}
         />
       </Card>
+    )
+  }
+
+  _renderModal() {
+    const image = this.state.modalImage
+    return (
+      <Modal
+        className='modal-img'
+        title={image.filename}
+        visible={this.state.modalVisible}
+        onOk={() => this.setState({modalVisible: false, modalImage: null})}
+        onCancel={() => this.setState({modalVisible: false, modalImage: null})}
+      >
+        <img alt={image.filename} src={image.url} />
+      </Modal>
     )
   }
 }
@@ -122,4 +134,4 @@ const VOTE_MUTATION = gql`
   }
 `
 
-export default graphql(VOTE_MUTATION, { name: 'voteMutation' }) (Post)
+export default withRouter(graphql(VOTE_MUTATION, { name: 'voteMutation' })(Post))

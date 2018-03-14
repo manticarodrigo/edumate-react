@@ -65,8 +65,11 @@ const FEED_QUERY = gql`
       images {
         id
         url
+        filename
       }
       poll {
+        id
+        endDate
         options {
           id
           name

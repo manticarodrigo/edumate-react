@@ -10,7 +10,7 @@ const FormItem = Form.Item
 let uuid = 2
 class CreatePost extends Component {
   state = {
-    poll: false,
+    pollVisible: false,
     fileList: []
   }
 
@@ -18,15 +18,11 @@ class CreatePost extends Component {
     const { form } = this.props
     // can use data-binding to get
     const optionKeys = form.getFieldValue('optionKeys')
-    // We need at least one passenger
-    if (optionKeys.length === 1) {
-      return
-    }
-
+    // We need at least two options
+    if (optionKeys.length <= 2) { return }
     // can use data-binding to set
-    form.setFieldsValue({
-      optionKeys: optionKeys.filter(key => key !== k),
-    })
+    form.setFieldsValue({ optionKeys: optionKeys.filter(key => key !== k) })
+    uuid += -1
   }
 
   addPollOption = () => {
@@ -37,9 +33,7 @@ class CreatePost extends Component {
     uuid++
     // can use data-binding to set
     // important! notify form to detect changes
-    form.setFieldsValue({
-      optionKeys: nextKeys,
-    })
+    form.setFieldsValue({ optionKeys: nextKeys })
   }
 
   handleSubmit = (e) => {
@@ -55,6 +49,7 @@ class CreatePost extends Component {
   }
 
   render() {
+    const { getFieldDecorator } = this.props.form
     const uploadProps = {
       onRemove: (file) => {
         this.setState(({ fileList }) => {
@@ -74,9 +69,50 @@ class CreatePost extends Component {
       },
       fileList: this.state.fileList,
     }
+    return (
+      <Card
+        className='create-post-card'
+      >
+        <Form>
+          <FormItem>
+            {getFieldDecorator('text', {
+              rules: [{ required: true, message: 'Text is required!' }],
+            }) (
+              <Input.TextArea
+                name='text'
+                type='text'
+                placeholder={this.state.pollVisible ? 'Ask a question.' : 'Share something new.'}
+              />
+            )}
+          </FormItem>
+          {this.state.pollVisible && (
+            this._renderPollForm()
+          )}
+        </Form>
+        <div className='buttons-row'>
+          <Button
+            icon='pie-chart'
+            onClick={() => this.setState({ pollVisible: !this.state.pollVisible })}
+          />
+          <Upload {...uploadProps}>
+            <Button
+              icon='picture'
+            />
+          </Upload>
+          <Button
+            type='primary'
+            onClick={this.handleSubmit}
+            className='submit-btn'
+          >
+            Submit
+          </Button>
+        </div>
+      </Card>
+    )
+  }
 
+  _renderPollForm() {
     const { getFieldDecorator, getFieldValue } = this.props.form
-
     getFieldDecorator('optionKeys', { initialValue: [0, 1] })
     const optionKeys = getFieldValue('optionKeys')
     const formItems = optionKeys.map((k, index) => {
@@ -107,70 +143,33 @@ class CreatePost extends Component {
       )
     })
     return (
-      <Card
-        className='create-post-card'
-      >
-        <Form>
-          <FormItem>
-            {getFieldDecorator('text', {
-              rules: [{ required: true, message: 'Text is required!' }],
-            }) (
-              <Input.TextArea
-                name='text'
-                type='text'
-                placeholder={this.state.poll ? 'Ask a question.' : 'Share something new.'}
-              />
-            )}
-          </FormItem>
-          {this.state.poll && (
-            <Card style={{ margin: '16px 0'}}>
-              {formItems}
-              <FormItem>
-                <Button type="dashed" onClick={this.addPollOption} style={{ width: '50%' }}>
-                  <Icon type="plus" /> Add poll option
-                </Button>
-              </FormItem>
-              <FormItem style={{ position: 'absolute', top: '24px', right: '24px', width: '40%' }}>
-                {getFieldDecorator('pollEndDate', {
-                  rules: [{ required: true, message: 'End date is required!' }],
-                }) (
-                  <DatePicker
-                    showTime
-                    name='pollEndDate'
-                    format="YYYY-MM-DD HH:mm"
-                    placeholder="End date"
-                    style={{ width: '100%' }}
-                  />
-                )}
-              </FormItem>
-            </Card>
-          )}
-        </Form>
-        <div className='buttons-row'>
-          <Button
-            icon='pie-chart'
-            onClick={() => this.setState({ poll: !this.state.poll })}
-          />
-          <Upload {...uploadProps}>
-            <Button
-              icon='picture'
-            />
-          </Upload>
-          <Button
-            type='primary'
-            onClick={this.handleSubmit}
-            className='submit-btn'
-          >
-            Submit
+      <Card style={{ margin: '16px 0'}}>
+        {formItems}
+        <FormItem>
+          <Button type="dashed" onClick={this.addPollOption} style={{ width: '50%' }}>
+            <Icon type="plus" /> Add poll option
           </Button>
-        </div>
+        </FormItem>
+        <FormItem style={{ position: 'absolute', top: '24px', right: '24px', width: '40%' }}>
+          {getFieldDecorator('pollEndDate', {
+            rules: [{ required: true, message: 'End date is required!' }],
+          }) (
+            <DatePicker
+              showTime
+              name='pollEndDate'
+              format="YYYY-MM-DD HH:mm"
+              placeholder="End date"
+              style={{ width: '100%' }}
+            />
+          )}
+        </FormItem>
       </Card>
     )
   }
 
   _createPost = async (data) => {
     const { text, pollOptions, pollEndDate } = data
-    const files = this.state.fileList
+    const files = this.state.fileList && this.state.fileList.length > 0 ? this.state.fileList : null
     await this.props.postMutation({
       variables: {
         text,
@@ -181,7 +180,7 @@ class CreatePost extends Component {
     }).catch(error => {
       console.log(error)
     })
-    this.props.history.push(`/`)
+    this.props.history.replace(`/`)
   }
 }
 
